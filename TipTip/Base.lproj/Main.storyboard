@@ -39,6 +39,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <action selector="calculatingTip:" destination="BYZ-38-t0r" eventType="editingChanged" id="drA-OW-t8F"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NHt-50-t56">
                                 <rect key="frame" x="206" y="167" width="132" height="30"/>
@@ -76,6 +79,9 @@
                                     <segment title="20%"/>
                                     <segment title="25%"/>
                                 </segments>
+                                <connections>
+                                    <action selector="calculatingTip:" destination="BYZ-38-t0r" eventType="valueChanged" id="7TL-Xf-vfb"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -85,6 +91,12 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" title="TipTip Calculator" id="pkR-CF-ap0"/>
+                    <connections>
+                        <outlet property="billTextField" destination="4fL-oJ-Ube" id="QUy-UF-PAb"/>
+                        <outlet property="tipControl" destination="jLX-N8-YbE" id="wZP-oi-cQf"/>
+                        <outlet property="tipLabel" destination="NHt-50-t56" id="VAx-zK-a9l"/>
+                        <outlet property="totalLabel" destination="r59-bO-FkI" id="81X-BY-mYV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="R9U-dv-NpX">
