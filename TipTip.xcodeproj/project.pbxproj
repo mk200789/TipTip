@@ -15,6 +15,7 @@
 		C6AFAFDA1F290D51007DDC6B /* TipTipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AFAFD91F290D51007DDC6B /* TipTipTests.swift */; };
 		C6AFAFE51F290D51007DDC6B /* TipTipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AFAFE41F290D51007DDC6B /* TipTipUITests.swift */; };
 		C6AFAFF31F29C160007DDC6B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AFAFF21F29C160007DDC6B /* SettingsViewController.swift */; };
+		C6AFAFF51F2B1634007DDC6B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AFAFF41F2B1634007DDC6B /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		C6AFAFE41F290D51007DDC6B /* TipTipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipTipUITests.swift; sourceTree = "<group>"; };
 		C6AFAFE61F290D51007DDC6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6AFAFF21F29C160007DDC6B /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		C6AFAFF41F2B1634007DDC6B /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				C6AFAFC41F290D51007DDC6B /* AppDelegate.swift */,
 				C6AFAFC61F290D51007DDC6B /* ViewController.swift */,
+				C6AFAFF41F2B1634007DDC6B /* Settings.swift */,
 				C6AFAFC81F290D51007DDC6B /* Main.storyboard */,
 				C6AFAFF21F29C160007DDC6B /* SettingsViewController.swift */,
 				C6AFAFCB1F290D51007DDC6B /* Assets.xcassets */,
@@ -267,6 +270,7 @@
 			files = (
 				C6AFAFC71F290D51007DDC6B /* ViewController.swift in Sources */,
 				C6AFAFC51F290D51007DDC6B /* AppDelegate.swift in Sources */,
+				C6AFAFF51F2B1634007DDC6B /* Settings.swift in Sources */,
 				C6AFAFF31F29C160007DDC6B /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipControl: UISegmentedControl!
     
     let tipPercentage = [0.15, 0.2, 0.25]
+    
+    let formatter = NumberFormatter()
 
     @IBAction func onTap(_ sender: Any) {
         //dismiss the keyboard
@@ -27,17 +29,23 @@ class ViewController: UIViewController {
     
     @IBAction func calculatingTip(_ sender: Any) {
         //when textfield has change edits calculate the tip
-        let bill = Double(billTextField.text!) ?? 0
+        
+        var bill = Double(billTextField.text!) ?? 0
+        if let bill_number = formatter.number(from: billTextField.text!){
+            bill = bill_number.doubleValue
+        }
         let tip = bill * tipPercentage[tipControl.selectedSegmentIndex]
         let total = bill + tip
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
         
+        tipLabel.text = formatter.string(for: tip)!
+        totalLabel.text = formatter.string(for: total)!
+
         updateDefaults(bill: bill, tip_amount: tip, total: total)
+        
     }
     
     func updateDefaults(bill: Double, tip_amount: Double, total: Double){
-        print("updateDefaults")
+        
         //save bill and tip value to display when app loads
         let defaults = UserDefaults.standard
         defaults.set(tipControl.selectedSegmentIndex, forKey: "default_tip")
@@ -49,28 +57,39 @@ class ViewController: UIViewController {
     
     func loadPreviousBill(){
         //load previous bill and values when app was last open
-        print("loadPreviousBill")
         let defaults = UserDefaults.standard
-        let bill = (defaults.object(forKey: "previous_bill") ?? 0) as! Int
-        let tip = (defaults.object(forKey: "previous_tip_amount") ?? 0) as! Double
-        let total = (defaults.object(forKey: "previous_total") ?? 0) as! Double
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
-        billTextField.text = String(format: "%D", bill)
+        let bill = (defaults.object(forKey: "previous_bill") ?? 0) //as! Int
+        let tip = (defaults.object(forKey: "previous_tip_amount") ?? 0) //as! Double
+        let total = (defaults.object(forKey: "previous_total") ?? 0) //as! Double
+        
+        tipLabel.text = formatter.string(for: tip)!
+        totalLabel.text = formatter.string(for: total)!
+        billTextField.text = formatter.string(for: bill)!
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        formatter.numberStyle = NumberFormatter.Style.currency
+        formatter.locale = Locale.current
+        formatter.currencySymbol = Locale.current.currencySymbol
+        
         //retrieve the default tip
         let defaults = UserDefaults.standard
         let default_tip = defaults.object(forKey: "default_tip") ?? 0
         tipControl.selectedSegmentIndex = default_tip as! Int
-    }
 
+        if (SETTINGS_CHANGES){
+            calculatingTip([])
+        }else{
+            loadPreviousBill()
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        loadPreviousBill()
+        
     }
     
     override func didReceiveMemoryWarning() {

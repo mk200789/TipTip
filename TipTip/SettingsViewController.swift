@@ -17,14 +17,21 @@ class SettingsViewController: UIViewController {
         let defaults = UserDefaults.standard
         defaults.set(defaultTipControl.selectedSegmentIndex, forKey: "default_tip")
         defaults.synchronize()
+        SETTINGS_CHANGES = true
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewWillAppear(_ animated: Bool) {
         let defaults = UserDefaults.standard
         let default_tip = defaults.object(forKey: "default_tip") ?? 0
         defaultTipControl.selectedSegmentIndex = default_tip as! Int
-
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+
     }
 
     override func didReceiveMemoryWarning() {
