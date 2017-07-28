@@ -16,11 +16,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var totalLabel: UILabel!
     
+    @IBOutlet weak var billViewContainer: UIView!
+    
     @IBOutlet weak var tipControl: UISegmentedControl!
     
     let tipPercentage = [0.15, 0.2, 0.25]
     
     let formatter = NumberFormatter()
+    
 
     @IBAction func onTap(_ sender: Any) {
         //dismiss the keyboard
@@ -42,6 +45,28 @@ class ViewController: UIViewController {
 
         updateDefaults(bill: bill, tip_amount: tip, total: total)
         
+    }
+    @IBAction func touchOutside(_ sender: Any) {
+        //handles touching outside of the billtextfield
+        UIView.animate(withDuration: 0.4) {
+            self.billViewContainer.bounds.size.height = 216
+            self.billViewContainer.bounds.size.width = self.view.bounds.size.width
+            self.billViewContainer.frame.origin.y = (self.navigationController?.toolbar.bounds.size.height)!
+            
+            self.billTextField.frame.origin.y = self.billTextField.frame.origin.y - 40
+        }
+    }
+    
+    @IBAction func touchInside(_ sender: Any) {
+        //handles touching inside of the billtextfield
+        UIView.animate(withDuration: 0.4) {
+            self.billViewContainer.bounds.size.height = self.view.bounds.size.height
+            self.billViewContainer.bounds.size.width = self.view.bounds.size.width
+            self.billViewContainer.frame.origin.y = (self.navigationController?.toolbar.bounds.size.height)!
+            
+            self.billTextField.frame.origin.y = self.billTextField.frame.origin.y + 40
+            self.view.bringSubview(toFront: self.billViewContainer)
+        }
     }
     
     func updateDefaults(bill: Double, tip_amount: Double, total: Double){
