@@ -24,7 +24,12 @@ class ViewController: UIViewController {
     
     let formatter = NumberFormatter()
     
+    @IBOutlet weak var splitBillAmount: UILabel!
 
+    @IBOutlet weak var splitBillStepper: UIStepper!
+
+    @IBOutlet weak var numberSplit: UILabel!
+    
     @IBAction func onTap(_ sender: Any) {
         //dismiss the keyboard
         view.endEditing(true)
@@ -37,12 +42,26 @@ class ViewController: UIViewController {
         let tip = bill * tipPercentage[tipControl.selectedSegmentIndex]
         let total = bill + tip
         
+        
         tipLabel.text = formatter.string(for: tip)!
         totalLabel.text = formatter.string(for: total)!
-
-        updateDefaults(bill: bill, tip_amount: tip, total: total)
+        
+        let splitAmount = total/splitBillStepper.value
+        numberSplit.text = String(describing: Int(splitBillStepper.value))
+        splitBillAmount.text = String(splitAmount)
+        
+        updateDefaults(bill: bill, tip_amount: tip, total: total, split: splitBillStepper.value, splitTotal: splitAmount)
+    }
+    
+    @IBAction func calculateSplitBill(_ sender: Any) {
+        print("split the bill: \(splitBillStepper.value)")
+        let total = convertCurrencyStringToDouble(amount: totalLabel.text!)
+        let splitAmount = total/splitBillStepper.value
+        numberSplit.text = String(describing: Int(splitBillStepper.value))
+        splitBillAmount.text = String(splitAmount)
         
     }
+    
     @IBAction func touchOutside(_ sender: Any) {
         //handles touching outside of the billtextfield
         UIView.animate(withDuration: 0.4) {
@@ -67,7 +86,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func updateDefaults(bill: Double, tip_amount: Double, total: Double){
+    func updateDefaults(bill: Double, tip_amount: Double, total: Double, split: Double, splitTotal: Double){
         
         //save bill and tip value to display when app loads
         let defaults = UserDefaults.standard
@@ -75,6 +94,8 @@ class ViewController: UIViewController {
         defaults.set(bill, forKey: "previous_bill")
         defaults.set(total, forKey: "previous_total")
         defaults.set(tip_amount, forKey: "previous_tip_amount")
+        defaults.set(split, forKey: "previous_split")
+        defaults.set(splitTotal, forKey: "previous_splitTotal")
         defaults.synchronize()
     }
     
@@ -82,7 +103,7 @@ class ViewController: UIViewController {
     func clearValue(){
         print("clearValue")
         billTextField.text = ""
-        updateDefaults(bill: 0.0, tip_amount: 0.0, total: 0.0)
+        updateDefaults(bill: 0.0, tip_amount: 0.0, total: 0.0, split: splitBillStepper.value, splitTotal: 0.0)
     }
     
     func loadPreviousBill(){
@@ -91,10 +112,16 @@ class ViewController: UIViewController {
         let bill = (defaults.object(forKey: "previous_bill") ?? 0) //as! Int
         let tip = (defaults.object(forKey: "previous_tip_amount") ?? 0) //as! Double
         let total = (defaults.object(forKey: "previous_total") ?? 0) //as! Double
+        let split = (defaults.object(forKey: "previous_split") ?? 1.0)
+        let splitTotal = (defaults.object(forKey: "previous_splitTotal") ?? 0)
         
         tipLabel.text = formatter.string(for: tip)!
         totalLabel.text = formatter.string(for: total)!
         billTextField.text = formatter.string(for: bill)!
+        numberSplit.text = String(describing: split as! Int)
+        splitBillStepper.value = split as! Double
+        splitBillAmount.text = formatter.string(for: splitTotal)!
+        
 
     }
     

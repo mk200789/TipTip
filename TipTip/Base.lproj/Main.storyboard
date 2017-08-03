@@ -90,6 +90,35 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Split bill:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c6f-jF-Uoq">
+                                        <rect key="frame" x="37" y="178" width="65" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Vm-WK-2uv">
+                                        <rect key="frame" x="155" y="178" width="68" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="SDx-5a-ygd">
+                                        <rect key="frame" x="243" y="178" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="calculateSplitBill:" destination="BYZ-38-t0r" eventType="valueChanged" id="VGu-qL-ScW"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tkv-ZA-gdn">
+                                        <rect key="frame" x="117" y="178" width="39" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                             </view>
                         </subviews>
@@ -109,6 +138,9 @@
                     <connections>
                         <outlet property="billTextField" destination="4fL-oJ-Ube" id="QUy-UF-PAb"/>
                         <outlet property="billViewContainer" destination="3Q4-qg-H36" id="n01-m6-WL9"/>
+                        <outlet property="numberSplit" destination="tkv-ZA-gdn" id="vAh-ml-hEJ"/>
+                        <outlet property="splitBillAmount" destination="8Vm-WK-2uv" id="7RK-Wq-DnV"/>
+                        <outlet property="splitBillStepper" destination="SDx-5a-ygd" id="qYr-Sj-Oav"/>
                         <outlet property="tipControl" destination="jLX-N8-YbE" id="wZP-oi-cQf"/>
                         <outlet property="tipLabel" destination="NHt-50-t56" id="VAx-zK-a9l"/>
                         <outlet property="totalLabel" destination="r59-bO-FkI" id="81X-BY-mYV"/>
