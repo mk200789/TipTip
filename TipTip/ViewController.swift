@@ -33,10 +33,7 @@ class ViewController: UIViewController {
     @IBAction func calculatingTip(_ sender: Any) {
         //when textfield has change edits calculate the tip
         
-        var bill = Double(billTextField.text!) ?? 0
-        if let bill_number = formatter.number(from: billTextField.text!){
-            bill = bill_number.doubleValue
-        }
+        let bill = convertCurrencyStringToDouble(amount: billTextField.text!)
         let tip = bill * tipPercentage[tipControl.selectedSegmentIndex]
         let total = bill + tip
         
@@ -59,6 +56,7 @@ class ViewController: UIViewController {
     
     @IBAction func touchInside(_ sender: Any) {
         //handles touching inside of the billtextfield
+        clearValue()
         UIView.animate(withDuration: 0.4) {
             self.billViewContainer.bounds.size.height = self.view.bounds.size.height
             self.billViewContainer.bounds.size.width = self.view.bounds.size.width
@@ -78,6 +76,13 @@ class ViewController: UIViewController {
         defaults.set(total, forKey: "previous_total")
         defaults.set(tip_amount, forKey: "previous_tip_amount")
         defaults.synchronize()
+    }
+    
+    
+    func clearValue(){
+        print("clearValue")
+        billTextField.text = ""
+        updateDefaults(bill: 0.0, tip_amount: 0.0, total: 0.0)
     }
     
     func loadPreviousBill(){
@@ -114,7 +119,33 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func convertCurrencyStringToDouble(amount: String) -> Double {
+        //convert string to double
+        let converter = NumberFormatter()
+        //convert amount if it has a comma in the string
+        converter.decimalSeparator = ","
+        if let result = converter.number(from: amount){
+            return result.doubleValue
+        }else{
+            //convert amount if it has a period in the string
+            converter.decimalSeparator = "."
+            if let result = converter.number(from: amount){
+                return result.doubleValue
+            }
+        }
         
+        //if amount string contains currency symbol convert it to nsnumber to return a double value
+        converter.numberStyle = NumberFormatter.Style.currency
+        converter.locale = Locale.current
+        converter.currencySymbol = Locale.current.currencySymbol
+        
+        if let bill_number = converter.number(from: amount){
+            return bill_number.doubleValue
+        }
+        
+        return 0.0
     }
     
     override func didReceiveMemoryWarning() {
