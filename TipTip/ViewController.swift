@@ -42,23 +42,22 @@ class ViewController: UIViewController {
         let tip = bill * tipPercentage[tipControl.selectedSegmentIndex]
         let total = bill + tip
         
-        
         tipLabel.text = formatter.string(for: tip)!
         totalLabel.text = formatter.string(for: total)!
         
         let splitAmount = total/splitBillStepper.value
         numberSplit.text = String(describing: Int(splitBillStepper.value))
-        splitBillAmount.text = String(splitAmount)
+        splitBillAmount.text = String(format: "%@%.2f", Locale.current.currencySymbol!, splitAmount)
         
         updateDefaults(bill: bill, tip_amount: tip, total: total, split: splitBillStepper.value, splitTotal: splitAmount)
     }
     
     @IBAction func calculateSplitBill(_ sender: Any) {
-        print("split the bill: \(splitBillStepper.value)")
+        //calculate the split bill by the number of people to split among equally
         let total = convertCurrencyStringToDouble(amount: totalLabel.text!)
         let splitAmount = total/splitBillStepper.value
         numberSplit.text = String(describing: Int(splitBillStepper.value))
-        splitBillAmount.text = String(splitAmount)
+        splitBillAmount.text = String(format: "%@%.2f", Locale.current.currencySymbol!, splitAmount)
         
     }
     
@@ -101,8 +100,11 @@ class ViewController: UIViewController {
     
     
     func clearValue(){
-        print("clearValue")
+        //clears the value of everything
         billTextField.text = ""
+        tipLabel.text = ""
+        totalLabel.text = ""
+        splitBillAmount.text = ""
         updateDefaults(bill: 0.0, tip_amount: 0.0, total: 0.0, split: splitBillStepper.value, splitTotal: 0.0)
     }
     
