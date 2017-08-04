@@ -30,6 +30,12 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var numberSplit: UILabel!
     
+    @IBOutlet weak var billTextView: UIView!
+    
+    @IBOutlet weak var calculationTextView: UIView!
+    
+    @IBOutlet weak var divider: UIView!
+    
     @IBAction func onTap(_ sender: Any) {
         //dismiss the keyboard
         view.endEditing(true)
@@ -135,8 +141,12 @@ class ViewController: UIViewController {
         //retrieve the default tip
         let defaults = UserDefaults.standard
         let default_tip = defaults.object(forKey: "default_tip") ?? 0
+        let default_theme = defaults.colorForKey(key: "default_theme") ?? UIColor.white
+        
         tipControl.selectedSegmentIndex = default_tip as! Int
-
+        billTextView.backgroundColor = default_theme
+        calculationTextView.backgroundColor = default_theme.adjust(by: -30)
+        divider.backgroundColor = default_theme.adjust(by: -10)
         if (SETTINGS_CHANGES){
             calculatingTip([])
         }else{
@@ -183,5 +193,29 @@ class ViewController: UIViewController {
     }
 
 
+}
+
+
+extension UIColor {
+    
+    func lighter(by percentage:CGFloat=30.0) -> UIColor? {
+        return self.adjust(by: abs(percentage) )
+    }
+    
+    func darker(by percentage:CGFloat=30.0) -> UIColor? {
+        return self.adjust(by: -1 * abs(percentage) )
+    }
+    
+    func adjust(by percentage:CGFloat=30.0) -> UIColor? {
+        var r:CGFloat=0, g:CGFloat=0, b:CGFloat=0, a:CGFloat=0;
+        if(self.getRed(&r, green: &g, blue: &b, alpha: &a)){
+            return UIColor(red: min(r + percentage/100, 1.0),
+                           green: min(g + percentage/100, 1.0),
+                           blue: min(b + percentage/100, 1.0),
+                           alpha: a)
+        }else{
+            return nil
+        }
+    }
 }
 
