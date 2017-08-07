@@ -4,7 +4,7 @@ TipTip is a tip calculator application for iOS.
 
 Submitted by: Wan Kim Mok
 
-Time spent: 3.5 hours spent in total
+Time spent: 5 hours spent in total
 
 ## User Stories
 
@@ -16,13 +16,14 @@ The following **required** functionality is complete:
 The following **optional** features are implemented:
 * [x] UI animations
 * [x] Remembering the bill amount across app restarts (if <10mins)
-* [ ] Using locale-specific currency and currency thousands separators.
-* [ ] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
+* [x] Using locale-specific currency and currency thousands separators.
+* [x] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
 
 The following **additional** features are implemented:
 
 - [x] User can change the default color theme of the app.
-
+- [x] Add the ability to set how many people will split the bill and providing the amount each person has to pay
+- [x] Add App Icon from [Icon Finder](https://www.iconfinder.com/icons/1055102/calculation_calculator_math_mathematics_icon#size=512)
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
