@@ -9,3 +9,5 @@
 import Foundation
 
 var SETTINGS_CHANGES = false
+
+let tipPercentage = [0.15, 0.2, 0.25]

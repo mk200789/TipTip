@@ -17,36 +17,14 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var purpleThemeButton: UIButton!
     
     
-    @IBAction func setDefaultTip(_ sender: Any) {
-        //set default tip
-        let defaults = UserDefaults.standard
-        defaults.set(defaultTipControl.selectedSegmentIndex, forKey: "default_tip")
-        defaults.synchronize()
-        SETTINGS_CHANGES = true
-    }
-    
-
-
     override func viewWillAppear(_ animated: Bool) {
         let defaults = UserDefaults.standard
         let default_tip = defaults.object(forKey: "default_tip") ?? 0
-        let default_theme = defaults.colorForKey(key: "default_theme") ?? UIColor.white //defaults.object(forKey: "default_theme") ?? UIColor.white
+        let default_theme = defaults.colorForKey(key: "default_theme") ?? self.view.backgroundColor
         
         defaultTipControl.selectedSegmentIndex = default_tip as! Int
         self.view.backgroundColor = default_theme
-        
-        
-        
-        
-    }
-    
-    
-    @IBAction func changeTheme(_ sender: UIButton){
-        //change the theme based on theme button selected button selected
-        self.view.backgroundColor = sender.backgroundColor
-        let defaults = UserDefaults.standard
-        defaults.setColor(color: sender.backgroundColor, forKey: "default_theme")
-        defaults.synchronize()
+        //self.navigationController?.navigationBar.barTintColor = default_theme.adjust(by: 5)
         
     }
     
@@ -65,13 +43,25 @@ class SettingsViewController: UIViewController {
         greyThemeButton.layer.borderWidth = 0.25
         greyThemeButton.layer.borderColor = UIColor.darkGray.cgColor
 
-        
-        
     }
     
+    @IBAction func setDefaultTip(_ sender: Any) {
+        //set default tip
+        let defaults = UserDefaults.standard
+        defaults.set(defaultTipControl.selectedSegmentIndex, forKey: "default_tip")
+        defaults.synchronize()
+        SETTINGS_CHANGES = true
+    }
     
-    override func viewWillDisappear(_ animated: Bool) {
-
+    @IBAction func setDefaultTheme(_ sender: UIButton){
+        //change the theme based on theme button selected button selected
+        self.view.backgroundColor = sender.backgroundColor
+        self.navigationController?.navigationBar.barTintColor = sender.backgroundColor
+        
+        let defaults = UserDefaults.standard
+        defaults.setColor(color: sender.backgroundColor, forKey: "default_theme")
+        defaults.synchronize()
+        
     }
 
     override func didReceiveMemoryWarning() {

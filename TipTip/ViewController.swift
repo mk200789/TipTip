@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let formatter = NumberFormatter()
+    
     @IBOutlet weak var billTextField: UITextField!
     
     @IBOutlet weak var tipLabel: UILabel!
@@ -19,10 +21,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var billViewContainer: UIView!
     
     @IBOutlet weak var tipControl: UISegmentedControl!
-    
-    let tipPercentage = [0.15, 0.2, 0.25]
-    
-    let formatter = NumberFormatter()
     
     @IBOutlet weak var splitBillAmount: UILabel!
 
@@ -36,13 +34,15 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var divider: UIView!
     
+    @IBOutlet weak var divider2: UIView!
+    
     @IBAction func onTap(_ sender: Any) {
         //dismiss the keyboard
         view.endEditing(true)
     }
     
     @IBAction func calculatingTip(_ sender: Any) {
-        //when textfield has change edits calculate the tip
+        //calculates the tip
         
         let bill = convertCurrencyStringToDouble(amount: billTextField.text!)
         let tip = bill * tipPercentage[tipControl.selectedSegmentIndex]
@@ -58,37 +58,10 @@ class ViewController: UIViewController {
         updateDefaults(bill: bill, tip_amount: tip, total: total, split: splitBillStepper.value, splitTotal: splitAmount)
     }
     
-    @IBAction func calculateSplitBill(_ sender: Any) {
-        //calculate the split bill by the number of people to split among equally
-        let total = convertCurrencyStringToDouble(amount: totalLabel.text!)
-        let splitAmount = total/splitBillStepper.value
-        numberSplit.text = String(describing: Int(splitBillStepper.value))
-        splitBillAmount.text = String(format: "%@%.2f", Locale.current.currencySymbol!, splitAmount)
-        
-    }
-    
-    @IBAction func touchOutside(_ sender: Any) {
-        //handles touching outside of the billtextfield
-        UIView.animate(withDuration: 0.4) {
-            self.billViewContainer.bounds.size.height = 216
-            self.billViewContainer.bounds.size.width = self.view.bounds.size.width
-            self.billViewContainer.frame.origin.y = (self.navigationController?.toolbar.bounds.size.height)!
-            
-            self.billTextField.frame.origin.y = self.billTextField.frame.origin.y - 40
-        }
-    }
-    
-    @IBAction func touchInside(_ sender: Any) {
-        //handles touching inside of the billtextfield
-        clearValue()
-        UIView.animate(withDuration: 0.4) {
-            self.billViewContainer.bounds.size.height = self.view.bounds.size.height
-            self.billViewContainer.bounds.size.width = self.view.bounds.size.width
-            self.billViewContainer.frame.origin.y = (self.navigationController?.toolbar.bounds.size.height)!
-            
-            self.billTextField.frame.origin.y = self.billTextField.frame.origin.y + 40
-            self.view.bringSubview(toFront: self.billViewContainer)
-        }
+    func setBillPlacementHolder(){
+        //sets the placeholder to 0.00 USD or the phone system's currency
+        let bill = formatter.string(from: NSNumber(value: 0.00))
+        billTextField.placeholder = String(format: "%@%.2f", Locale.current.currencySymbol!, bill!)
     }
     
     func updateDefaults(bill: Double, tip_amount: Double, total: Double, split: Double, splitTotal: Double){
@@ -120,33 +93,54 @@ class ViewController: UIViewController {
         let bill = (defaults.object(forKey: "previous_bill") ?? 0) //as! Int
         let tip = (defaults.object(forKey: "previous_tip_amount") ?? 0) //as! Double
         let total = (defaults.object(forKey: "previous_total") ?? 0) //as! Double
-        let split = (defaults.object(forKey: "previous_split") ?? 1.0)
+        let split = (defaults.object(forKey: "previous_split") ?? 1) as! Int
         let splitTotal = (defaults.object(forKey: "previous_splitTotal") ?? 0)
         
         tipLabel.text = formatter.string(for: tip)!
         totalLabel.text = formatter.string(for: total)!
-        billTextField.text = formatter.string(for: bill)!
-        numberSplit.text = String(describing: split as! Int)
-        splitBillStepper.value = split as! Double
+        billTextField.text = String(describing: bill)
+        numberSplit.text = String(describing: split)
+        splitBillStepper.value = Double(split)
         splitBillAmount.text = formatter.string(for: splitTotal)!
+    }
+    
+    func loadDefaultSettings(){
+        //retrieve the default tip
+        let defaults = UserDefaults.standard
+        let default_tip = defaults.object(forKey: "default_tip") ?? 0
+        let default_theme = defaults.colorForKey(key: "default_theme") ?? self.view.backgroundColor
         
-
+        
+        tipControl.selectedSegmentIndex = default_tip as! Int
+        self.navigationController?.navigationBar.barTintColor = default_theme
+        self.view.backgroundColor = default_theme
+        billTextView.backgroundColor = default_theme
+        calculationTextView.backgroundColor = default_theme?.adjust(by: -30)
+        divider.backgroundColor = default_theme?.adjust(by: -10)
+        divider2.backgroundColor = default_theme?.adjust(by: -20)
+        
+    }
+    
+    func removeNavigationBarHairline() {
+        //remove the bar hairline on the navigation bar
+        let image = UIImage()
+        self.navigationController?.navigationBar.setBackgroundImage(image, for: .any, barMetrics: .default)
+        self.navigationController?.navigationBar.shadowImage = image
+        self.navigationController?.navigationBar.isTranslucent = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        removeNavigationBarHairline()
+        
         formatter.numberStyle = NumberFormatter.Style.currency
         formatter.locale = Locale.current
         formatter.currencySymbol = Locale.current.currencySymbol
         
-        //retrieve the default tip
-        let defaults = UserDefaults.standard
-        let default_tip = defaults.object(forKey: "default_tip") ?? 0
-        let default_theme = defaults.colorForKey(key: "default_theme") ?? UIColor.white
+        setBillPlacementHolder()
         
-        tipControl.selectedSegmentIndex = default_tip as! Int
-        billTextView.backgroundColor = default_theme
-        calculationTextView.backgroundColor = default_theme.adjust(by: -30)
-        divider.backgroundColor = default_theme.adjust(by: -10)
+        loadDefaultSettings()
+        
+        
         if (SETTINGS_CHANGES){
             calculatingTip([])
         }else{
@@ -158,6 +152,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        setBillPlacementHolder()
+        
+        billTextField.adjustsFontSizeToFitWidth = true
+        totalLabel.adjustsFontSizeToFitWidth = true
+        splitBillAmount.adjustsFontSizeToFitWidth = true
+        
+        billTextField.becomeFirstResponder()
+        
+        
     }
     
     func convertCurrencyStringToDouble(amount: String) -> Double {
@@ -218,4 +221,3 @@ extension UIColor {
         }
     }
 }
-
