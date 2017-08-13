@@ -43,7 +43,6 @@ class ViewController: UIViewController {
     
     @IBAction func calculatingTip(_ sender: Any) {
         //calculates the tip
-        print("calculatingTip")
         let bill = convertCurrencyStringToDouble(amount: billTextField.text!)
         let tip = bill * tipPercentage[tipControl.selectedSegmentIndex]
         let total = bill + tip
@@ -55,12 +54,11 @@ class ViewController: UIViewController {
         numberSplit.text = String(describing: Int(splitBillStepper.value))
         splitBillAmount.text = String(format: "%@%.2f", Locale.current.currencySymbol!, splitAmount)
         
-        updateDefaults(bill: bill, tip_amount: tip, total: total, split: splitBillStepper.value, splitTotal: splitAmount)
+        setBill(bill: bill)
     }
     
     func setPlacementHolders(){
         //sets the placeholder to 0.00 USD or the phone system's currency
-        print("setPlacementHolders")
         let defaultValue = formatter.string(from: NSNumber(value: 0.00))
         billTextField.placeholder = String(format: "%@%.2f", Locale.current.currencySymbol!, defaultValue!)
         tipLabel.text = String(format: "%@%.2f", Locale.current.currencySymbol!, defaultValue!)
@@ -69,34 +67,32 @@ class ViewController: UIViewController {
         numberSplit.text = String(describing: Int(splitBillStepper.value))
     }
     
-    func updateDefaults(bill: Double, tip_amount: Double, total: Double, split: Double, splitTotal: Double){
+    func setBill(bill: Double){
         //save bill and tip value to display when app loads
         let defaults = UserDefaults.standard
+        defaults.set(bill, forKey: "lastBill")
         defaults.set(tipControl.selectedSegmentIndex, forKey: "default_tip")
-        defaults.set(bill, forKey: "previous_bill")
-        defaults.set(total, forKey: "previous_total")
-        defaults.set(tip_amount, forKey: "previous_tip_amount")
-        defaults.set(split, forKey: "previous_split")
-        defaults.set(splitTotal, forKey: "previous_splitTotal")
+        defaults.set(splitBillStepper.value, forKey: "previous_split")
         defaults.set(NSDate.init(), forKey: "lastBillDate")
         defaults.synchronize()
     }
     
-    
     func clearValue(){
         //clears the value of everything
-        setPlacementHolders()
-        updateDefaults(bill: 0.0, tip_amount: 0.0, total: 0.0, split: splitBillStepper.value, splitTotal: 0.0)
+        setBill(bill: 0.0)
     }
     
     func loadPreviousBill(){
         //load previous bill and values when app was last open
         let defaults = UserDefaults.standard
-        let bill = (defaults.object(forKey: "previous_bill") ?? 0) //as! Int
-        let tip = (defaults.object(forKey: "previous_tip_amount") ?? 0) //as! Double
-        let total = (defaults.object(forKey: "previous_total") ?? 0) //as! Double
+        let bill = (defaults.object(forKey: "lastBill") ?? 0) as! Double
         let split = (defaults.object(forKey: "previous_split") ?? 1) as! Int
-        let splitTotal = (defaults.object(forKey: "previous_splitTotal") ?? 0)
+        let tipIndex = (defaults.object(forKey: "default_tip") ?? 0) as! Int
+        
+        let tip = bill * tipPercentage[tipIndex]
+        let total = bill + tip
+        let splitTotal = total/Double(split)
+
         
         tipLabel.text = formatter.string(for: tip)!
         totalLabel.text = formatter.string(for: total)!
@@ -108,7 +104,6 @@ class ViewController: UIViewController {
     
     func loadSettings(){
         //retrieve the default settings
-        print("loadSettings")
         let defaults = UserDefaults.standard
         let default_tip = defaults.object(forKey: "default_tip") ?? 0
         let default_theme = defaults.colorForKey(key: "default_theme") ?? self.view.backgroundColor
@@ -129,7 +124,6 @@ class ViewController: UIViewController {
     
     func removeNavigationBarHairline() {
         //remove the bar hairline on the navigation bar
-        print("removeNavigationBarHairline")
         let image = UIImage()
         self.navigationController?.navigationBar.setBackgroundImage(image, for: .any, barMetrics: .default)
         self.navigationController?.navigationBar.shadowImage = image
@@ -138,7 +132,6 @@ class ViewController: UIViewController {
     
     
     func getCurrency(){
-        print("getCurrency")
         formatter.numberStyle = NumberFormatter.Style.currency
         formatter.locale = Locale.current
         formatter.currencySymbol = Locale.current.currencySymbol
@@ -148,6 +141,7 @@ class ViewController: UIViewController {
         removeNavigationBarHairline()
         
         loadSettings()
+        
         
         if (SETTINGS_CHANGES){
             calculatingTip([])
@@ -177,7 +171,6 @@ class ViewController: UIViewController {
         }
         
         billTextField.becomeFirstResponder()
-        
         
     }
     
